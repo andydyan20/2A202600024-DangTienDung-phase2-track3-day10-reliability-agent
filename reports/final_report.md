@@ -33,10 +33,10 @@ User Request
 | SLI | SLO target | Actual value | Met? |
 |---|---|---:|---|
 | Availability | >= 99% | 100.00% | Yes |
-| Latency P95 | < 2500 ms | 518.27 | Yes |
+| Latency P95 | < 2500 ms | 515.79 | Yes |
 | Fallback success rate | >= 95% | 100.00% | Yes |
-| Cache hit rate | >= 10% | 37.75% | Yes |
-| Recovery time | < 5000 ms | 3015.554984410604 | Yes |
+| Cache hit rate | >= 10% | 39.50% | Yes |
+| Recovery time | < 5000 ms | 3015.4902935028076 | Yes |
 
 ## Metrics Summary
 
@@ -45,15 +45,15 @@ User Request
 | total_requests | 400 |
 | availability | 1.0 |
 | error_rate | 0.0 |
-| latency_p50_ms | 217.83 |
-| latency_p95_ms | 518.27 |
-| latency_p99_ms | 553.2 |
+| latency_p50_ms | 212.02 |
+| latency_p95_ms | 515.79 |
+| latency_p99_ms | 548.25 |
 | fallback_success_rate | 1.0 |
-| cache_hit_rate | 0.3775 |
+| cache_hit_rate | 0.395 |
 | circuit_open_count | 18 |
-| recovery_time_ms | 3015.554984410604 |
-| estimated_cost | 0.107472 |
-| estimated_cost_saved | 0.151 |
+| recovery_time_ms | 3015.4902935028076 |
+| estimated_cost | 0.10416 |
+| estimated_cost_saved | 0.158 |
 
 ## Cache Comparison
 
@@ -61,9 +61,9 @@ The run includes cache-enabled scenarios and breaker-focused scenarios with cach
 
 | Metric | Observed |
 |---|---:|
-| cache_hit_rate | 37.75% |
-| estimated_cost_saved | 0.151 |
-| estimated_cost | 0.107472 |
+| cache_hit_rate | 39.50% |
+| estimated_cost_saved | 0.158 |
+| estimated_cost | 0.10416 |
 
 False-hit guardrail evidence: a cached 2024 refund-policy answer is not reused for a 2026 refund-policy query, and privacy-like account/balance queries are not cached.
 

@@ -17,6 +17,7 @@ class GatewayResponse:
     latency_ms: float
     estimated_cost: float
     error: str | None = None
+    route_reason: str | None = None
 
 
 class ReliabilityGateway:
@@ -35,9 +36,8 @@ class ReliabilityGateway:
     def complete(self, prompt: str) -> GatewayResponse:
         """Return a reliable response or a static fallback.
 
-        Route labels include both the path and provider/reason so metrics and
-        reports can distinguish primary success, fallback success, cache hit,
-        and static degradation.
+        ``route`` keeps the stable lab contract while ``route_reason`` carries
+        provider/cache detail for diagnostics and reports.
         """
         start = time.perf_counter()
 
@@ -46,11 +46,12 @@ class ReliabilityGateway:
             if cached is not None:
                 return GatewayResponse(
                     cached,
-                    f"cache_hit:{score:.2f}",
+                    "primary",
                     None,
                     True,
                     (time.perf_counter() - start) * 1000,
                     0.0,
+                    route_reason=f"cache_hit:{score:.2f}",
                 )
 
         last_error: str | None = None
@@ -63,11 +64,12 @@ class ReliabilityGateway:
                 route_prefix = "primary" if provider is self.providers[0] else "fallback"
                 return GatewayResponse(
                     text=response.text,
-                    route=f"{route_prefix}:{provider.name}",
+                    route=route_prefix,
                     provider=provider.name,
                     cache_hit=False,
                     latency_ms=(time.perf_counter() - start) * 1000,
                     estimated_cost=response.estimated_cost,
+                    route_reason=f"{route_prefix}:{provider.name}",
                 )
             except (ProviderError, CircuitOpenError) as exc:
                 last_error = str(exc)
@@ -81,4 +83,5 @@ class ReliabilityGateway:
             latency_ms=(time.perf_counter() - start) * 1000,
             estimated_cost=0.0,
             error=last_error,
+            route_reason=f"static_fallback:{last_error}" if last_error else "static_fallback",
         )
